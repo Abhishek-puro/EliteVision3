@@ -10,110 +10,68 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 
 export default function AuthPage() {
   const [isRegistering, setIsRegistering] = useState(false)
-  const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email")
-  const [otpSent, setOtpSent] = useState(false)
-  const [otp, setOtp] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const router = useRouter()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (otpSent && otp.length === 6) {
-      // Verify OTP logic here
-      router.push("/products")
-    } else if (!otpSent) {
-      // Send OTP logic here
-      setOtpSent(true)
+    if (isRegistering && password !== confirmPassword) {
+      alert("Passwords do not match")
+      return
     }
+    // Authentication logic here
+    router.push("/products")
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#f8f8f6]">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
+    <div className="flex items-center justify-center min-h-screen bg-[#B2B5E0]">
+      <Card className="w-full max-w-md border-black border-2 ">
+        <CardHeader  >
+          <CardTitle className="text-3xl  font-bold text-center">
             {isRegistering ? "Register" : "Login"}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              {isRegistering && (
-                <div>
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Enter your name" required />
-                </div>
-              )}
-
-              <div>
-                <Label htmlFor="loginMethod">Login Method</Label>
-                <div className="flex mt-1">
-                  <Button
-                    type="button"
-                    variant={loginMethod === "email" ? "default" : "outline"}
-                    className="w-1/2"
-                    onClick={() => setLoginMethod("email")}
-                  >
-                    Email
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={loginMethod === "phone" ? "default" : "outline"}
-                    className="w-1/2"
-                    onClick={() => setLoginMethod("phone")}
-                  >
-                    Phone
-                  </Button>
-                </div>
-              </div>
-
-              {loginMethod === "email" ? (
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your email" required />
-                </div>
-              ) : (
-                <div>
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" placeholder="Enter your phone number" required />
-                </div>
-              )}
-
-              {otpSent ? (
-                <div>
-                  <Label htmlFor="otp">Enter OTP</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="Enter OTP"
-                    maxLength={6}
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    required
-                  />
-                </div>
-              ) : (
-                <Button type="button" onClick={() => setOtpSent(true)} className="w-full">
-                  Send OTP
-                </Button>
-              )}
-
-              {isRegistering && (
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" placeholder="Enter your password" required />
-                </div>
-              )}
-
-              {isRegistering && (
-                <div>
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input id="confirmPassword" type="password" placeholder="Confirm your password" required />
-                </div>
-              )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="Enter your email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
             </div>
-
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input 
+                id="password" 
+                type="password" 
+                placeholder="Enter your password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
+            </div>
+            {isRegistering && (
+              <div>
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input 
+                  id="confirmPassword" 
+                  type="password" 
+                  placeholder="Confirm your password" 
+                  value={confirmPassword} 
+                  onChange={(e) => setConfirmPassword(e.target.value)} 
+                  required 
+                />
+              </div>
+            )}
             <CardFooter className="flex flex-col gap-3 mt-6">
-              <Button type="submit" className="w-full bg-[#aa70a7] hover:bg-[#aa70a7]/90" disabled={otpSent && otp.length !== 6}>
+              <Button type="submit" className="w-full bg-[#aa70a7] hover:bg-[#aa70a7]/90">
                 {isRegistering ? "Register" : "Login"}
               </Button>
               <Button variant="link" onClick={() => setIsRegistering(!isRegistering)}>
@@ -123,7 +81,6 @@ export default function AuthPage() {
           </form>
         </CardContent>
       </Card>
-      
     </div>
   )
 }

@@ -1,23 +1,22 @@
-import React from 'react';
+"use client";
+import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
 
 const Dashboard = () => {
+  const router = useRouter(); // Initialize the router
+
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">User Dashboard</h1>
+    <div className="p-4 bg-gray-200">
+      <h1 className="text-5xl font-bold text-center text-[#aa70a7] mb-4">User Profile</h1>
 
       {/* Overview Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2">Recent Activity</h2>
-          <p className="text-gray-600">Check your latest activity and interactions.</p>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8 mb-6">
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-2">Messages</h2>
-          <p className="text-gray-600">You have 5 unread messages.</p>
+          <p className="text-gray-600">No messages.</p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-2">Notifications</h2>
-          <p className="text-gray-600">You have 3 new notifications.</p>
+          <p className="text-gray-600">Exciting Offer Coming Soon.</p>
         </div>
       </div>
 
@@ -40,12 +39,26 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Settings and Actions Section */}
-      <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
-        <button className="bg-[#28b4a4] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#28b4a4]">
-          Edit Profile
-        </button>
+      {/* Cart and Order Details Section */}
+      <div className="bg-white p-4 rounded-lg shadow-md grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 mb-6">
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Cart Details</h2>
+          <button
+            className="bg-[#28b4a4] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#239b8d]"
+            onClick={() => router.push("/cart")} // Navigate to /cart
+          >
+            Go to Cart
+          </button>
+        </div>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+          <button
+            className="bg-[#28b4a4] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#239b8d]"
+            onClick={() => router.push("/success")} // Navigate to /success
+          >
+            Go to your Order
+          </button>
+        </div>
       </div>
     </div>
   );
