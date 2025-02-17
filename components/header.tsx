@@ -49,6 +49,9 @@ export function Header({ selectedBrand, onBrandChange, isOpen, setIsOpen }: Head
             >
               Schedule Eye Exam Here
             </Button>
+            <Button  className="hidden md:inline-flex bg-[#aa70a7] hover:bg-[#aa70a7]/90 text-white" onClick={() => router.push("/dashboard")}>
+              Go to Dashboard
+            </Button>
             <Button variant="outline" className="hidden md:inline-flex" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" /> Logout
             </Button>
@@ -66,6 +69,9 @@ export function Header({ selectedBrand, onBrandChange, isOpen, setIsOpen }: Head
                   onClick={() => window.open("https://www.dragarwal.com/appointment-booking-online/?utm_source=Google_Search&utm_campaign=HM_AEH_Search_Maharashtra_Mumbai_Mulund_Generic_18102024&utm_medium=Mulund_Eye_Doctor&utm_term=eye%20doctor&gad_source=1&gclid=CjwKCAiAk8G9BhA0EiwAOQxmfhzeVd08BnGHpTY3FWxu56rNa_jYsT2om0RZwIDI2bzW1vurjZz7YxoCXwkQAvD_BwE", "_blank")}
                 >
                   Schedule Eye Exam Here
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => router.push("/dashboard")}>
+                  Go to Dashboard
                 </Button>
                 <Button variant="outline" className="w-full" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" /> Logout
@@ -89,4 +95,3 @@ export function Header({ selectedBrand, onBrandChange, isOpen, setIsOpen }: Head
     </header>
   )
 }
-
