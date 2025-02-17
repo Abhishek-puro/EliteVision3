@@ -10,31 +10,45 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 
 export default function AuthPage() {
   const [isRegistering, setIsRegistering] = useState(false)
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const router = useRouter()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     if (isRegistering && password !== confirmPassword) {
-      alert("Passwords do not match")
-      return
+      alert("Passwords do not match");
+      return;
     }
-    // Authentication logic here
-    router.push("/products")
-  }
+    // Store name and email in localStorage
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userEmail", email);
+    router.push("/products"); // Navigate to the dashboard
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#B2B5E0]">
       <Card className="w-full max-w-md border-black border-2 ">
-        <CardHeader  >
-          <CardTitle className="text-3xl  font-bold text-center">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-center">
             {isRegistering ? "Register" : "Login"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input 
+                id="name" 
+                type="text" 
+                placeholder="Enter your name" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                required 
+              />
+            </div>
             <div>
               <Label htmlFor="email">Email</Label>
               <Input 

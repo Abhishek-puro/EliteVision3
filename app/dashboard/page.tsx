@@ -1,8 +1,26 @@
-"use client";
-import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation" // Import useRouter from next/navigation
 
 const Dashboard = () => {
   const router = useRouter(); // Initialize the router
+  const [userName, setUserName] = useState("")
+  const [userEmail, setUserEmail] = useState("")
+
+  useEffect(() => {
+    // Retrieve name and email from localStorage
+    const name = localStorage.getItem("userName")
+    const email = localStorage.getItem("userEmail")
+
+    if (name && email) {
+      setUserName(name)
+      setUserEmail(email)
+    } else {
+      // Redirect to login if no user data is found
+      router.push("/login")
+    }
+  }, [router])
 
   return (
     <div className="p-4 bg-gray-200">
@@ -26,11 +44,11 @@ const Dashboard = () => {
         <div className="space-y-4">
           <div className="flex justify-between">
             <span className="font-medium">Username:</span>
-            <span className="text-gray-600">john_doe</span>
+            <span className="text-gray-600">{userName}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Email:</span>
-            <span className="text-gray-600">john.doe@example.com</span>
+            <span className="text-gray-600">{userEmail}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Membership:</span>
