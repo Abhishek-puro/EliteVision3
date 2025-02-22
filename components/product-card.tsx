@@ -1,16 +1,17 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Modal } from "./modal";
-import { Camera, ShoppingCart } from "lucide-react";
+import { Camera, ShoppingCart, Trash2 } from "lucide-react";
 
 interface ProductCardProps {
   name: string;
   imageUrl: string;
   tryOnLink?: string;
-  onAddToCart: (product: { name: string; price: number }) => void;
+  onAddToCart: (product: { name: string; price: number; quantity: number }) => void;
+  onRemoveFromCart: (product: { name: string }) => void;
+  hoveredProduct: string | null;
+  setHoveredProduct: (name: string | null) => void;
 }
 
 export function ProductCard({
@@ -18,9 +19,13 @@ export function ProductCard({
   imageUrl,
   tryOnLink = "https://ar.vervear.com/glasses/675f91cf6a00d6990d91f08e",
   onAddToCart,
+  onRemoveFromCart,
+  hoveredProduct,
+  setHoveredProduct,
 }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     const storedPrice = localStorage.getItem(`price-${name}`);
@@ -34,14 +39,40 @@ export function ProductCard({
   }, [name]);
 
   const handleAddToCart = () => {
-    onAddToCart({ name, price });
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onAddToCart({ name, price, quantity: newQuantity });
+  };
+
+  const handleRemoveFromCart = () => {
+    if (quantity > 1) {
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      onRemoveFromCart({ name });
+    } else {
+      setQuantity(0);
+      onRemoveFromCart({ name });
+    }
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
+    <div
+      className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 
+        transition-transform duration-300 ease-in-out ${
+          hoveredProduct && hoveredProduct !== name ? "blur-sm" : ""
+        }`}
+      onMouseEnter={() => setHoveredProduct(name)}
+      onMouseLeave={() => setHoveredProduct(null)}
+    >
       {/* Product Image */}
-      <div className="aspect-square relative mb-4 bg-[#F8F8F6]">
-        <Image src={imageUrl || "/placeholder.svg"} alt={name} fill className="object-contain" />
+      <div className="aspect-square relative mb-4 bg-[#F8F8F6] overflow-hidden">
+        <div
+          className={`w-full h-full flex items-center justify-center transition-transform duration-300 ease-in-out ${
+            hoveredProduct === name ? "scale-110" : ""
+          }`}
+        >
+          <Image src={imageUrl || "/placeholder.svg"} alt={name} fill className="object-contain" />
+        </div>
       </div>
 
       {/* Product Name */}
@@ -70,13 +101,27 @@ export function ProductCard({
         </Button>
       </div>
 
+      {/* Display Quantity and Remove Button */}
+      {quantity > 0 && (
+        <div className="mt-3 flex flex-col items-center">
+          <p className="text-center text-sm font-semibold text-gray-600">
+            Quantity: {quantity}
+          </p>
+          <Button
+            className="mt-2 bg-red-500 hover:bg-red-600 text-white text-[10px] h-auto md:h-8 py-1 md:py-1.5 flex items-center justify-center gap-1 flex-shrink-0"
+            onClick={handleRemoveFromCart}
+          >
+            <Trash2 className="w-3 h-3" />
+            REMOVE
+          </Button>
+        </div>
+      )}
+
       {/* Modal */}
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {/* Centered Modal */}
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-[90vw] md:w-[50vw] h-[90vh] flex flex-col bg-white p-4 rounded-lg shadow-lg">
-              {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto">
                 {tryOnLink ? (
                   <iframe

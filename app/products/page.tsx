@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Banner } from "@/components/banner";
@@ -24,6 +23,8 @@ export default function ProductsPage() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -68,6 +69,19 @@ export default function ProductsPage() {
     });
   };
 
+  const handleRemoveFromCart = (product: { name: string }) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart
+        .map((item) =>
+          item.name === product.name ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0);
+
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -94,16 +108,16 @@ export default function ProductsPage() {
               <ShoppingCart className="mr-2 h-4 w-4" /> Cart ({totalItems}) - ₹{totalPrice.toLocaleString()}
             </Button>
           </div>
-          <div className="flex flex-col gap-4 sticky top-0 z-10 bg-[#f8f8f6] py-4">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <BrandFilter selectedBrands={selectedBrands} onBrandChange={handleBrandChange} onMobileFilterClick={() => setIsSideMenuOpen(true)} />
-              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} onSearch={handleSearch} />
-            </div>
-          </div>
-          <ProductGrid currentPage={currentPage} products={filteredProducts} onAddToCart={handleAddToCart} />
+          <ProductGrid
+            currentPage={currentPage}
+            products={filteredProducts}
+            onAddToCart={handleAddToCart}
+            onRemoveFromCart={handleRemoveFromCart} // ✅ Pass the function here
+            hoveredProduct={hoveredProduct}
+            setHoveredProduct={setHoveredProduct}
+          />
         </div>
       </main>
-      
     </div>
   );
 }

@@ -1,24 +1,34 @@
-"use client"
+"use client";
 
-import { ProductCard } from "./product-card"
+import { ProductCard } from "./product-card";
 
 interface Product {
-  name: string
-  imageUrl: string
-  tryOnLink?: string
+  name: string;
+  imageUrl: string;
+  tryOnLink?: string;
 }
 
 interface ProductGridProps {
-  currentPage: number
-  products: Product[]
-  onAddToCart: (product: { name: string; price: number }) => void
+  currentPage: number;
+  products: Product[];
+  onAddToCart: (product: { name: string; price: number }) => void;
+  onRemoveFromCart: (product: { name: string }) => void; // ✅ Add this
+  hoveredProduct: string | null;
+  setHoveredProduct: (name: string | null) => void;
 }
 
-export function ProductGrid({ currentPage, products, onAddToCart }: ProductGridProps) {
-  const ITEMS_PER_PAGE = 15
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const endIndex = startIndex + ITEMS_PER_PAGE
-  const currentProducts = products.slice(startIndex, endIndex)
+export function ProductGrid({
+  currentPage,
+  products,
+  onAddToCart,
+  onRemoveFromCart, // ✅ Add this
+  hoveredProduct,
+  setHoveredProduct,
+}: ProductGridProps) {
+  const ITEMS_PER_PAGE = 15;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentProducts = products.slice(startIndex, endIndex);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 mt-6">
@@ -29,9 +39,11 @@ export function ProductGrid({ currentPage, products, onAddToCart }: ProductGridP
           imageUrl={product.imageUrl}
           tryOnLink={product.tryOnLink}
           onAddToCart={onAddToCart}
+          onRemoveFromCart={onRemoveFromCart} // ✅ Pass this
+          hoveredProduct={hoveredProduct}
+          setHoveredProduct={setHoveredProduct}
         />
       ))}
     </div>
-  )
+  );
 }
-
