@@ -108,6 +108,16 @@ export default function ProductsPage() {
               <ShoppingCart className="mr-2 h-4 w-4" /> Cart ({totalItems}) - ₹{totalPrice.toLocaleString()}
             </Button>
           </div>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+  <BrandFilter selectedBrands={selectedBrands} onBrandChange={handleBrandChange} />
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={setCurrentPage}
+    onSearch={handleSearch}
+  />
+</div>
+
           <ProductGrid
             currentPage={currentPage}
             products={filteredProducts}
