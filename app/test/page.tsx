@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 type TestCase = { text: string; size: string; color: string };
 
 const generateRandomString = (): string => {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   return Array.from({ length: 7 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 };
 
@@ -18,8 +19,8 @@ export default function EyeTest() {
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
   const [testCompleted, setTestCompleted] = useState(false);
-  
-  const inputRef = useRef<HTMLInputElement>(null); // Create ref for input
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTestCases([
@@ -33,9 +34,9 @@ export default function EyeTest() {
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus(); // Automatically focus input field
+      inputRef.current.focus();
     }
-  }, [currentIndex]); // Focus input whenever `currentIndex` changes
+  }, [currentIndex]);
 
   const handleSubmit = () => {
     if (userInput.trim().toLowerCase() === testCases[currentIndex]?.text.toLowerCase()) {
@@ -55,6 +56,12 @@ export default function EyeTest() {
     return "text-red-500";
   };
 
+  // Generate random position for text inside the box
+  const randomPosition = {
+    x: Math.floor(Math.random() * 200) - 100, // Moves within ±100px horizontally
+    y: Math.floor(Math.random() * 200) - 100, // Moves within ±100px vertically
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-purple-300 p-4">
       <h1 className="text-5xl font-bold mb-6 text-black">Eye Test</h1>
@@ -62,26 +69,34 @@ export default function EyeTest() {
       {testCases.length === 0 ? (
         <p className="text-lg text-gray-300">Loading...</p>
       ) : !testCompleted ? (
-        <div className="flex flex-col items-center border-black border-2 bg-white p-6 rounded-lg shadow-lg">
-          <p
-            className={`font-bold ${testCases[currentIndex].size} ${testCases[currentIndex].color} select-none mb-4`}
-            style={{ userSelect: "none" }}
-          >
-            {testCases[currentIndex].text}
-          </p>
-          <input
-            ref={inputRef} // Attach ref to input field
-            type="text"
-            required
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            className="border p-2 mt-4 text-center text-lg"
-            placeholder="Type the Displayed Phrase"
-            maxLength={7}
-          />
-          <div className=" bottom-4">
-            <Button 
-              onClick={handleSubmit} 
+        <>
+          {/* Text Display Box */}
+          <div className="relative flex items-center justify-center w-[1000px] h-[300px] border-black border-2 bg-white p-6 rounded-lg shadow-lg">
+            <motion.p
+              className={`absolute font-bold ${testCases[currentIndex].size} ${testCases[currentIndex].color} select-none`}
+              style={{ userSelect: "none" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, x: randomPosition.x, y: randomPosition.y }}
+              transition={{ duration: 0.5 }}
+            >
+              {testCases[currentIndex].text}
+            </motion.p>
+          </div>
+
+          {/* Input and Submit Button */}
+          <div className="flex flex-col items-center mt-6">
+            <input
+              ref={inputRef}
+              type="text"
+              required
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              className="border p-2 text-center text-lg w-64"
+              placeholder="Type the Displayed Phrase"
+              maxLength={7}
+            />
+            <Button
+              onClick={handleSubmit}
               disabled={userInput.length < 7}
               className={`mt-4 px-6 py-3 text-white text-sm font-medium rounded ${
                 userInput.length < 7 ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
@@ -90,7 +105,7 @@ export default function EyeTest() {
               Submit
             </Button>
           </div>
-        </div>
+        </>
       ) : (
         <>
           <h2 className={`text-2xl font-bold ${getResultColor()}`}>Your Score: {score}/5</h2>
