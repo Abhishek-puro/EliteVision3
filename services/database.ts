@@ -33,6 +33,9 @@ export interface User {
   
   // Database service
   class DatabaseService {
+    getAllFeedback() {
+        throw new Error("Method not implemented.")
+    }
     private users: Record<string, User> = {}
     private currentUser: User | null = null
     private initialized = false
