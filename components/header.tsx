@@ -39,7 +39,7 @@ export function Header({ selectedBrand, onBrandChange, isOpen, setIsOpen }: Head
               alt="The Eye Doctor Unlimited"
               width={240}
               height={80}
-              className="w-full h-auto"
+              // className="w-full h-auto"
             />
           </div>
           <div className="flex items-center gap-4">

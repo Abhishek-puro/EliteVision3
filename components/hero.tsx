@@ -17,20 +17,43 @@ export function Hero() {
               VIRTUAL <span className="text-[#AA70A7]">TRY-ON</span> FOR YOUR FAVOURITE{" "}
               <span className="text-[#AA70A7]">EYEWEAR</span> BRANDS
             </h1>
-            <div className="flex flex-col lg:flex-row gap-4 justify-center lg:justify-start max-w-[330px] mx-auto lg:max-w-none lg:mx-0">
-              <Button
-                className="font-montserrat h-14 sm:h-12 bg-[#aa70a7] hover:bg-[#aa70a7]/90 text-white px-8 text-base sm:text-sm font-medium w-full"
-                onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
-              >
-                VIEW ALL PRODUCTS
-              </Button>
-              <Button
-                className="font-montserrat h-14 sm:h-12 bg-[#28b4a4] hover:bg-[#28b4a4]/90 text-white px-8 text-base sm:text-sm font-medium w-full"
-                onClick={() => router.push("/test")} // ✅ Navigate to /test
-              >
-                Take Eye Test
-              </Button>
-            </div>
+            <div className="flex flex-col items-center lg:items-start gap-4 max-w-[430px] mx-auto lg:max-w-none lg:mx-0">
+  {/* First two buttons side by side */}
+  <div className="flex flex-col items-center lg:items-start gap-4 mx-auto lg:mx-0">
+  {/* First two buttons in a row */}
+  <div className="flex flex-col lg:flex-row gap-4 w-full max-w-[400px] mx-auto">
+    <Button
+      className="font-montserrat h-14 sm:h-12 bg-[#aa70a7] hover:bg-[#aa70a7]/90 text-white px-8 text-base sm:text-sm font-medium w-full lg:w-auto"
+      onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+    >
+      VIEW ALL PRODUCTS
+    </Button>
+
+    <Button
+      className="font-montserrat h-14 sm:h-12 bg-[#28b4a4] hover:bg-[#28b4a4]/90 text-white px-8 text-base sm:text-sm font-medium w-full lg:w-auto"
+      onClick={() => router.push("/test")}
+    >
+      Take Eye Test
+    </Button>
+  </div>
+
+  {/* Last button with limited width */}
+  <div className="w-full max-w-[400px] mx-auto">
+    <Button
+      className="font-montserrat h-14 sm:h-12 bg-[#00ff00] hover:bg-[#28b4a4]/90 text-white px-8 text-base sm:text-sm font-medium w-[390px]"
+      onClick={() => router.push("/feedback")}
+    >
+      Feedback
+    </Button>
+  </div>
+
+</div>
+
+
+  {/* Last button (full width) below */}
+
+</div>
+
           </div>
           <div className="relative col-span-full lg:col-span-1 order-2 lg:order-2 w-full max-w-[600px] mx-auto">
             <div className="aspect-[1/1] lg:aspect-auto w-full h-full lg:h-[500px] relative">
